@@ -27,7 +27,7 @@ private void Awake() {
 }
 
 private void FixedUpdate() {
-    float delta = Time.deltaTime;
+    float delta = Time.fixedDeltaTime;
 
     if(cameraHandler != null) {
         cameraHandler.FollowTarget(delta);
