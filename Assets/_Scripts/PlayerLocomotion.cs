@@ -5,7 +5,8 @@ namespace JD {
 
 public class PlayerLocomotion : MonoBehaviour
 {
-
+    //VARS
+    PlayerManager playerManager;
     Transform cameraObject;
     InputHandler inputHandler;
     Vector3 moveDirection;
@@ -14,43 +15,40 @@ public class PlayerLocomotion : MonoBehaviour
     public Transform myTransform;
     [HideInInspector]
     public AnimatorHandler animatorHandler;
+    
     public new Rigidbody rigidbody;
     public GameObject normalCamera;
 
-    [Header("Stats")]
+    [Header("Movement Stats")]
     [SerializeField]
     float movementSpeed = 5;
     [SerializeField]
     float rotationSpeed = 10;
-
-
-
+    [SerializeField]
+    float sprintSpeed = 7;
+//===========================================================================
+  
+//START
    public void Start() {
+//get components
+    playerManager = GetComponent<PlayerManager>();
     rigidbody = GetComponent<Rigidbody>();
     inputHandler = GetComponent<InputHandler>();
     animatorHandler = GetComponentInChildren<AnimatorHandler>();
+
     cameraObject = Camera.main.transform;
     myTransform = transform;
 
+//initialize behaviors
     animatorHandler.Initialize();
 
    }
 
-    public void Update() {
-        float delta = Time.deltaTime;
-
-        inputHandler.TickInput(delta);
-
-        HandleMovement(delta);
-        HandleRollingAndSprinting(delta);
-
-
-       
-    }
+   //MOVEMENT
     #region Movement
     Vector3 normalVector;
     Vector3 targetPosition;
-
+//CUSTOM METHODS
     private void HandleRotation(float delta) {
 
         Vector3 targetDir = Vector3.zero;
@@ -75,18 +73,33 @@ public class PlayerLocomotion : MonoBehaviour
 
     public void HandleMovement(float delta) {
 
-         moveDirection = cameraObject.forward * inputHandler.vertical;
+        if(inputHandler.rollFlag)
+            return;
+
+        moveDirection = cameraObject.forward * inputHandler.vertical;
         moveDirection += cameraObject.right * inputHandler.horizontal;
         moveDirection.Normalize();
         moveDirection.y = 0;
 
         float speed = movementSpeed;
-        moveDirection *= speed;
+
+        if(inputHandler.sprintFlag) {
+            speed = sprintSpeed;
+            playerManager.isSprinting = true;
+            moveDirection *= speed;
+        }
+        else {
+            moveDirection *= speed;
+        }
+
+
+
+        
 
         Vector3 projectedVelocity = Vector3.ProjectOnPlane(moveDirection, normalVector);
         rigidbody.velocity = projectedVelocity;
 
-        animatorHandler.UpdateAnimatorValues(inputHandler.moveAmount, 0);
+        animatorHandler.UpdateAnimatorValues(inputHandler.moveAmount, 0, playerManager.isSprinting);
         if(animatorHandler.canRotate) {
             HandleRotation(delta);
         }

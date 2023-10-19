@@ -34,6 +34,7 @@ public class CameraHandler : MonoBehaviour
     public float minimumCollisionOffSet = 0.2f;
    //funcitonality
 
+//AWAKE
    private void Awake()
 {
     singleton = this;
@@ -42,6 +43,8 @@ public class CameraHandler : MonoBehaviour
     ignoreLayers = ~(1 << 8 | 1 << 9 | 1 << 10);
 }
 //using smooth damp over lerp for easier movment on camera
+
+//CUSTOM METHODS
 public void FollowTarget(float delta) {
     Vector3 targetPosition = Vector3.SmoothDamp(myTransform.position, targetTransform.position, ref cameraFollowVelocity, delta / followSpeed);
     myTransform.position = targetPosition;
