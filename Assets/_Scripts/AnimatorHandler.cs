@@ -88,8 +88,10 @@ public class AnimatorHandler : MonoBehaviour
 
 
     private void OnAnimatorMove() {
-        if(inputHandler.isInteracting == false)
-        return;
+        if(inputHandler.isInteracting == false) {
+            return;
+        }
+            
 
         float delta = Time.deltaTime;
         playerLocomotion.rigidbody.drag = 0;

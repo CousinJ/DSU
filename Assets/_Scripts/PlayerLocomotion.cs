@@ -103,6 +103,7 @@ public class PlayerLocomotion : MonoBehaviour
 
             if(inputHandler.moveAmount > 0) {
                 animatorHandler.PlayTargetAnimation("Rolling", true);
+                moveDirection.y = 0;
                 Quaternion rollRotation = Quaternion.LookRotation(moveDirection);
                 myTransform.rotation = rollRotation;
             }

@@ -70,7 +70,7 @@ private void FixedUpdate() {
 
 
 private void HandleRollInput(float delta) {
-    // b_Input = inputActions.PlayerActions.Roll.phase == UnityEngine.InputSystem.InputActionPhase.Started;
+    
     b_Input = inputActions.PlayerActions.Roll.triggered;
     if(b_Input) {
         rollFlag = true;
