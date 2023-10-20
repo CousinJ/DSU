@@ -21,6 +21,8 @@ public bool isInteracting;
 // other types 
 [Header("Player Flags")]
   public bool isSprinting;
+  public bool isInAir;
+  public bool isGrounded;
 
 
 
@@ -45,6 +47,7 @@ public bool isInteracting;
 
         playerLocomotion.HandleMovement(delta);
         playerLocomotion.HandleRollingAndSprinting(delta);
+        playerLocomotion.HandleFalling(delta, playerLocomotion.moveDirection);
     }
 //FIXED UPDATE 
     private void FixedUpdate() {
@@ -60,9 +63,15 @@ public bool isInteracting;
 
 //LATE UPDATE
 private void LateUpdate() {
+
+
     inputHandler.rollFlag = false;
     inputHandler.sprintFlag = false;
     isSprinting = inputHandler.b_Input;
+
+    if(isInAir) {
+        playerLocomotion.inAirTimer = playerLocomotion.inAirTimer + Time.deltaTime;
+    }
 }
 
 
